@@ -5,60 +5,65 @@ import javax.persistence.*;
 @Entity
 public class Product {
 
-    private String productname;
-    private int productprice;
-    private int productquantity;
-    private int productsize;
-
     @Id
     //@GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name ="id")
-    private long id;
+    @Column(name ="product_id")
+    private long productId;
+    @Column(name = "product_name")
+    private String productName;
+    @Column(name = "product_price")
+    private double productPrice;
+    @Column(name = "product_quantity")
+    private int productQuantity;
+    @Column(name = "product_size")
+    private String productSize;
+
+
 
     public long getProductId() {
-        return id;
+        return productId;
     }
 
-    public void setProductid(long productid) {
-        this.id = id;
+    public void setProductid(long productId) {
+        this.productId = productId;
     }
 
 
     public String getProductName() {
-        return productname;
+        return productName;
     }
 
-    public void setProductName(String productname) {
-        this.productname = productname;
+    public void setProductName(String productName) {
+        this.productName = productName;
     }
 
     public double getProductPrice() {
-        return productprice;
+        return productPrice;
     }
 
-    public void setProductPrice(int productprice) {
-        this.productprice = productprice;
+    public void setProductPrice(double productPrice) {
+        this.productPrice = productPrice;
     }
 
-    public double getProductSize() {
-        return productsize;
+    public String getProductSize() {
+        return productSize;
     }
 
-    public void setProductSize(int productsize) {
-        this.productsize = productsize;
+    public void setProductSize(String productSize) {
+        this.productSize = productSize;
     }
 
     public int getProductQuantity() {
-        return productquantity;
+        return productQuantity;
     }
 
     public void setProductQuantity(int productquantity) {
-        this.productquantity = productquantity;
+        this.productQuantity = productQuantity;
     }
 
     @Override
     public String toString() {
 
-        return " | "+id+" | "+productname;
+        return " | "+productId+" | "+productName +" | "+ productPrice +" | "+productQuantity+" | "+" | "+productSize;
     }
 }
