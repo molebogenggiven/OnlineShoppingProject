@@ -1,9 +1,9 @@
 package com.michaelcgood.Controller;
 
+import com.michaelcgood.Exceptions.ResourceNotFoundException;
 import com.michaelcgood.dao.ProductRepository;
 import com.michaelcgood.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.config.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -16,7 +16,7 @@ public class MyProductController {
     @Autowired
     ProductRepository productRepository;
 
-     @GetMapping("/getAllproducts")
+     @GetMapping("/products")
 
     public List<Product> getAllProducts(){
 
@@ -34,10 +34,10 @@ public class MyProductController {
      @PutMapping("/product/{product_id}")
 
     public Product updateProduct(@PathVariable(value = "product_id") Long productId, @Valid
-                                 @RequestBody Product product){
+                                @RequestBody Product product){
 
-         Product product1 = productRepository.findOne(productId);
-                 //.orElseThrow(() -> new ResourceNotFoundException("product1", "product_id", productId));
+        Product product1 = productRepository.findById(productId)
+                .orElseThrow(() -> new ResourceNotFoundException("product1", "product_id", productId));
          product1.setProductName(product.getProductName());
          product1.setProductPrice(product.getProductPrice());
          product1.setProductQuantity(product.getProductQuantity());
