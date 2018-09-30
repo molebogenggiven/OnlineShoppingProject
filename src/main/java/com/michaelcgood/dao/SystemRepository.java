@@ -7,6 +7,6 @@ import com.michaelcgood.model.Given;
 
 @Repository
 public interface SystemRepository extends JpaRepository<Given,Long> {
-	
+
 
 }

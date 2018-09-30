@@ -2,6 +2,7 @@ package com.michaelcgood.app;
 
 import javax.sql.DataSource;
 
+import com.michaelcgood.Service.StorageService;
 import com.michaelcgood.dao.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,28 +16,35 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import com.michaelcgood.model.Given;
 
 import com.michaelcgood.dao.SystemRepository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+
 //
 //@SpringBootApplication
 //@EnableJpaRepositories("com.michaelcgood.dao")
 //@EntityScan("com.michaelcgood.model")
 @SpringBootApplication
 @EnableJpaAuditing
-@ComponentScan(basePackages= {"com.michaelcgood.Controller"})
-@EnableJpaRepositories("com.michaelcgood.dao")
+@EnableTransactionManagement
+@ComponentScan(basePackages= {"com.michaelcgood.Controller","com.michaelcgood.dao","com.michaelcgood.Service"})
+@EnableJpaRepositories(basePackages = {"com.michaelcgood.dao",})
 @EntityScan("com.michaelcgood.model")
 
-public class MysqlJdbcDriverApplication{
 
-//	@Autowired
-//	@Qualifier("dataSource")
-//	DataSource dataSource;
+
+public class MysqlJdbcDriverApplication implements CommandLineRunner{
+
+	
+	//@Qualifier("dataSource")
+	//DataSource dataSource;
 //
 //    @Autowired
 //    ProductRepository productRepository;
-//
+//{}
 //
 //    @Autowired
 //	SystemRepository systemRepository;
+	@Autowired
+	StorageService storageService;
 
 	public static void main(String[] args) {
 		SpringApplication.run(MysqlJdbcDriverApplication.class, args);
@@ -44,7 +52,14 @@ public class MysqlJdbcDriverApplication{
 
 	}
 
-//	@Override
+	@Override
+	public void run(String... args) {
+		storageService.deleteAll();
+		storageService.init();
+		
+	}
+
+	//	@Override
 //	public void run(String... args) throws Exception {
 //		System.out.println("Our DataSource is = " + dataSource);
 //		Iterable<com.michaelcgood.model.Given> systemList = systemRepository.findAll();

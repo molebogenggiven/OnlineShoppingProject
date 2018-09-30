@@ -1,24 +1,64 @@
 package com.michaelcgood.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Entity
-public class Product {
+@Table(name = "product_information_table")
+public class Product implements Serializable{
 
     @Id
-    //@GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name ="product_id")
+    @Column
     private long productId;
-    @Column(name = "product_name")
+
+    @NotNull
+    @Column
     private String productName;
-    @Column(name = "product_price")
+
+    @NotNull
+    @Column
     private double productPrice;
-    @Column(name = "product_quantity")
+
+
+
+    @NotNull
+    @Column
     private int productQuantity;
-    @Column(name = "product_size")
+
+    @NotNull
+    @Column
     private String productSize;
 
+    @Lob
+    @NotNull
+    @Column
+    private String pictureData;
 
+    @NotNull
+    @Column
+    private String category;
+
+
+    public void setProductId(long productId) {
+        this.productId = productId;
+    }
+
+    public String getPictureData() {
+        return pictureData;
+    }
+
+    public void setPictureData(String pictureData) {
+        this.pictureData = pictureData;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategoty(String category) {
+        this.category = category;
+    }
 
     public long getProductId() {
         return productId;
@@ -61,9 +101,20 @@ public class Product {
         this.productQuantity = productQuantity;
     }
 
-    @Override
-    public String toString() {
-
-        return " | "+productId+" | "+productName +" | "+ productPrice +" | "+productQuantity+" | "+" | "+productSize;
+    public Product(){} // default constructor
+    public Product(long productId, String productName, double productPrice, int productQuantity,String productSize, String pictureData, String category) {
+        this.productId = productId;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productQuantity = productQuantity;
+        this.productSize = productSize;
+        this.pictureData = pictureData;
+        this.category = category;
     }
+
+    //    @Override
+//    public String toString() {
+//
+//        return " | "+productId+" | "+productName +" | "+ productPrice +" | "+productQuantity+" | "+" | "+productSize;
+//    }
 }
