@@ -1,11 +1,7 @@
 package com.michaelcgood.app;
 
-import javax.sql.DataSource;
-
 import com.michaelcgood.Service.StorageService;
-import com.michaelcgood.dao.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,9 +9,7 @@ import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import com.michaelcgood.model.Given;
 
-import com.michaelcgood.dao.SystemRepository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 //
@@ -25,7 +19,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 @EnableJpaAuditing
 @EnableTransactionManagement
-@ComponentScan(basePackages= {"com.michaelcgood.Controller","com.michaelcgood.dao","com.michaelcgood.Service"})
+@ComponentScan(basePackages= {"com.michaelcgood.controller","com.michaelcgood.dao","com.michaelcgood.Service"})
 @EnableJpaRepositories(basePackages = {"com.michaelcgood.dao",})
 @EntityScan("com.michaelcgood.model")
 

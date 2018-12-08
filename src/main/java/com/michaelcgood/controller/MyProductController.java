@@ -1,4 +1,4 @@
-package com.michaelcgood.Controller;
+package com.michaelcgood.controller;
 
 import com.michaelcgood.Exceptions.ResourceNotFoundException;
 import com.michaelcgood.Service.MenService;
@@ -6,7 +6,6 @@ import com.michaelcgood.dao.MenRepository;
 import com.michaelcgood.dao.ProductRepository;
 import com.michaelcgood.model.MenModel;
 import com.michaelcgood.model.Product;
-import com.sun.org.apache.bcel.internal.util.Repository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -95,7 +94,7 @@ public class MyProductController {
      @PutMapping("/product/{product_id}")
 
     public Product updateProduct(@PathVariable(value = "product_id") Long productId, @Valid
-                                @RequestBody Product product){
+                                @RequestBody Product product) throws ResourceNotFoundException{
 
         Product product1 = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("product1", "product_id", productId));
@@ -111,14 +110,14 @@ public class MyProductController {
      }
 
     @GetMapping("/singleProduct/{id}")
-    public Product getUserById(@PathVariable(value = "id") Long productId) {
+    public Product getUserById(@PathVariable(value = "id") Long productId) throws ResourceNotFoundException{
         return productRepository.findById(productId)
 
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "id", productId));
     }
 
     @DeleteMapping("/deleteProduct/{productId}")
-    public ResponseEntity<?> deleteUser(@PathVariable( value = "productId") Long productId) {
+    public ResponseEntity<?> deleteUser(@PathVariable( value = "productId") Long productId) throws ResourceNotFoundException {
         Product productModel = productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("productModel", "id", productId));
 
