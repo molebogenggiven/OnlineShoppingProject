@@ -22,9 +22,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @ComponentScan(basePackages= {"com.michaelcgood.controller","com.michaelcgood.dao","com.michaelcgood.Service"})
 @EnableJpaRepositories(basePackages = {"com.michaelcgood.dao",})
 @EntityScan("com.michaelcgood.model")
-
-
-
 public class MysqlJdbcDriverApplication implements CommandLineRunner{
 
 	

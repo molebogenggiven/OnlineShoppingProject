@@ -19,7 +19,7 @@ public class TemporaryModel implements Serializable {
     @Column
     private String password;
 
-   @NotNull
+    @NotNull
     @Column
     private String passwordVerify;
 
