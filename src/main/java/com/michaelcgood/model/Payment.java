@@ -22,7 +22,7 @@ public class Payment implements Serializable{
 
     @NotNull
     @Column
-    private int secuityCode;
+    private int securityCode;
 
     @NotNull
     @Column
@@ -59,11 +59,11 @@ public class Payment implements Serializable{
     }
 
     public int getSecuityCode() {
-        return secuityCode;
+        return securityCode;
     }
 
     public void setSecuityCode(int secuityCode) {
-        this.secuityCode = secuityCode;
+        this.securityCode = secuityCode;
     }
 
     public String getMonth() {
