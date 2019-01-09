@@ -9,9 +9,10 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
+
 @Entity
-@Table(name ="user_login_table")
-public class UserLogin extends Login implements Serializable {
+@Table(name = "admin_login_table")
+public class AdminLogin extends Login implements Serializable {
 
 
     @Id
@@ -21,6 +22,7 @@ public class UserLogin extends Login implements Serializable {
     public String getUsername() {
         return super.getUsername();
     }
+
 
     @NotNull
     @Column
