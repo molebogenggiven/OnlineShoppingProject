@@ -1,5 +1,7 @@
 package com.michaelcgood.model;
 
+import com.michaelcgood.parentClasses.Login;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -8,9 +10,8 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 @Entity
-@Table(name ="login_table")
-public class Login implements Serializable {
-
+@Table(name ="user_login_table")
+public class UserLogin extends Login implements Serializable {
     @Id
     @NotNull
     @Column
@@ -37,10 +38,12 @@ public class Login implements Serializable {
         return password;
     }
 
-    public Login(){}
+    public UserLogin(){}
 
-    public Login(String username, String password) {
+    public UserLogin(String username, String password) {
         this.username = username;
         this.password = password;
     }
+
+
 }

@@ -2,7 +2,8 @@ package com.michaelcgood.controller;
 
 import com.michaelcgood.Exceptions.ResourceNotFoundException;
 import com.michaelcgood.dao.LoginRepository;
-import com.michaelcgood.model.Login;
+import com.michaelcgood.model.UserLogin;
+import com.michaelcgood.requestDTO.LoginRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +22,15 @@ public class LoginController {
 
     @PostMapping("/loginUser")
 
-    public String userLogin(@Valid @RequestBody Login login){
+    public String userLogin(@Valid @RequestBody LoginRequestDTO loginRequestDTO){
 
 
-        if(loginRepository.findUserByUsernameAndPassword(login.getUsername(),
-                login.getPassword()) != null){
+        if(loginRepository.findUserByUsernameAndPassword(loginRequestDTO.getUsername(),
+                loginRequestDTO.getPassword()) != null){
 
             return "success";
-        }else if(loginRepository.findUserByUsernameAndPassword(login.getUsername(),
-                login.getPassword()) == null){
+        }else if(loginRepository.findUserByUsernameAndPassword(loginRequestDTO.getUsername(),
+                loginRequestDTO.getPassword()) == null){
             return "failed";
         }
 
@@ -37,17 +38,16 @@ public class LoginController {
         return null;}
 
     @GetMapping("/findUsers")
-    public List<Login> getAllProducts(){
+    public List<UserLogin> getAllProducts(){
 
         return loginRepository.findAll();
     }
 
     @GetMapping("/users/{id}")
-    public ResponseEntity<Login> getUserById(@PathVariable(value = "id") String username) throws Exception{
-        Login user = loginRepository.findById(username)
+    public ResponseEntity<?> getUserById(@PathVariable(value = "id") String username) throws Exception{
+        UserLogin user = loginRepository.findById(username)
 
                 .orElseThrow(() -> new ResourceNotFoundException("Login", "id", username));
-
         return ResponseEntity.ok().body(user);
     }
 }
