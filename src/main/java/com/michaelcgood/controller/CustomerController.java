@@ -2,8 +2,12 @@ package com.michaelcgood.controller;
 
 import com.michaelcgood.Exceptions.ResourceNotFoundException;
 import com.michaelcgood.Service.TemporaryServices;
+import com.michaelcgood.dao.LoginRepository;
 import com.michaelcgood.dao.TemporaryRepository;
 import com.michaelcgood.model.TemporaryModel;
+import com.michaelcgood.model.UserLogin;
+import com.michaelcgood.requestDTO.CodeDTO;
+import com.michaelcgood.responseDTO.RegistrationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,10 +24,13 @@ public class CustomerController {
     //CustomerRepository customerRepository;
 
     @Autowired
-   TemporaryServices temporaryServices;
+    private TemporaryServices temporaryServices;
 
     @Autowired
-    TemporaryRepository temporaryRepository;
+    private TemporaryRepository temporaryRepository;
+
+    @Autowired
+    private LoginRepository loginRepository;
 
 //    @PostMapping("/register")
 //    public Customer registerCustomer(@Valid @RequestBody Customer customer){
@@ -52,37 +59,65 @@ public class CustomerController {
     }
 
     @PostMapping("/registerCustomer")
-    public String saveCustomerToTempDb(@Valid @RequestBody TemporaryModel temporaryModel){
+    public ResponseEntity<?> saveCustomerToTempDb(@Valid @RequestBody TemporaryModel temporaryModel){
 
-//       if (temporaryModel != null) {
+           RegistrationDTO registrationDTO = new RegistrationDTO();
+           if(temporaryServices.saveCustomerTemporaryData(temporaryModel).contains("Successfully")){
 
-           temporaryServices.saveCustomerTemporaryData(temporaryModel);
-               return "You Have Successfully Registered";
-//           }else {
-//               return "You Have Already Registered";
-//           }
+               registrationDTO.setUsername(temporaryModel.getUsername());
+               registrationDTO.setCode(temporaryModel.getCode());
+               registrationDTO.setStatus("Success");
+               return ResponseEntity.ok().body(registrationDTO);
+           }else if(temporaryServices.saveCustomerTemporaryData(temporaryModel).contains("progress")){
 
-//       }
-//
-//       return "Please Send Your Details Again";
-    }
+               TemporaryModel temporaryModelUser = temporaryRepository.getCustomerDatails(temporaryModel.getUsername());
+               registrationDTO.setUsername(temporaryModel.getUsername());
+               registrationDTO.setStatus("progress");
+               registrationDTO.setCode(temporaryModelUser.getCode());
 
-    @GetMapping("/resendCode/{code}")
+               return ResponseEntity.ok().body(registrationDTO);
+           }else if(temporaryServices.saveCustomerTemporaryData(temporaryModel).contains("active")){
+
+               registrationDTO.setUsername(temporaryModel.getUsername());
+               registrationDTO.setStatus("active");
+
+               return ResponseEntity.ok().body(registrationDTO);
+           }
+
+           return ResponseEntity.ok(HttpStatus.INTERNAL_SERVER_ERROR);
+}
+
+    @GetMapping("/resendCode")
     public ResponseEntity<String> ResendCode(@PathVariable(value ="code") long code ){
-
       return ResponseEntity.status(HttpStatus.MULTI_STATUS).body("Hello");
 
     }
 
-    @GetMapping("/validateCode/{code}")
-    public ResponseEntity<String> getCode(@PathVariable(value = "code") long code) {
+    @PostMapping("/validateCode")
+    public ResponseEntity<?> validateCode(@Valid @RequestBody CodeDTO codeDTO) {
+            RegistrationDTO registrationDTO = new RegistrationDTO();
+            UserLogin userLogin = new UserLogin();
+          if(temporaryRepository.verifyUsernameAndCode(codeDTO.getUsername(), codeDTO.getCode()) != null){
+             TemporaryModel temporaryModel = temporaryRepository.getCustomerDatails(codeDTO.getUsername());
+             temporaryModel.setStatus("Active");
+             temporaryRepository.save(temporaryModel);
+             userLogin.setUsername(temporaryModel.getUsername());
+             userLogin.setPassword(temporaryModel.getPassword());
+             loginRepository.save(userLogin);
+             registrationDTO.setUsername(codeDTO.getUsername());
+             registrationDTO.setStatus("Registered");
+             registrationDTO.setCode(1);
 
-//        if(temporaryRepository.existsById((code))){
-//            TemporaryModel temporaryModel = temporaryRepository.getAllCustomerDetails(code);
-//            temporaryServices.SaveCustomerToPermanentDatabase(temporaryModel);
-//        }
+             return ResponseEntity.ok().body(registrationDTO);
 
-        return ResponseEntity.status(HttpStatus.OK).body("Guru");
+          }else {
+
+              registrationDTO.setUsername(codeDTO.getUsername());
+              registrationDTO.setStatus("Code does not exists");
+              registrationDTO.setCode(0);
+
+              return ResponseEntity.ok().body(registrationDTO);
+          }
 
 
     }

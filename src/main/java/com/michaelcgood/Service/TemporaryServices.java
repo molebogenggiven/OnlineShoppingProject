@@ -16,10 +16,10 @@ import java.util.Random;
 public class TemporaryServices {
 
     @Autowired
-    TemporaryRepository temporaryRepository;
+    private TemporaryRepository temporaryRepository;
 
     @Autowired
-    CustomerRepository customerRepository;
+    private CustomerRepository customerRepository;
 
     private JavaMailSender javaMailSender;
     private int code;
@@ -32,12 +32,30 @@ public class TemporaryServices {
     public String saveCustomerTemporaryData(TemporaryModel temporaryModel){
 
         // temporaryRepository.verifyUsername(temporaryModel.getUsername())
-           sendNotification(temporaryModel);
-          temporaryModel.setStatus("InProgress");
-            temporaryModel.setCode(getCode());
-            temporaryRepository.save(temporaryModel);
 
-            return "Your Have SuccessFully Registered";
+            TemporaryModel temporaryModelUser = temporaryRepository.getCustomerDatails(temporaryModel.getUsername());
+
+            if(temporaryModelUser == null){
+
+                sendNotification(temporaryModel);
+                temporaryModel.setStatus("InProgress");
+                temporaryModel.setCode(getCode());
+                temporaryRepository.save(temporaryModel);
+
+                return "Your Have Successfully Registered";
+            }else if(temporaryModelUser.getUsername() != null && temporaryModelUser.getStatus().equals("InProgress")){
+
+
+                return "Your status is in progress";
+
+            }else if(temporaryModelUser.getUsername() != null && temporaryModelUser.getStatus().equals("Active")){
+
+                return "Your status is active";
+            }
+
+
+
+            return "Something went wrong";
 
 //        }else {
 //

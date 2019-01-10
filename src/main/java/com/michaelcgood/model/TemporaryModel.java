@@ -1,5 +1,7 @@
 package com.michaelcgood.model;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -9,6 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "temporary_user_table")
+@DynamicUpdate
 public class TemporaryModel implements Serializable {
     @Id
     @NotNull
